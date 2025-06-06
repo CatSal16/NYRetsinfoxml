@@ -1,0 +1,48 @@
+openapi: 3.1.0
+info:
+  title: Retsinfo XML Whitelist GPT
+  version: 1.0.0
+  description: GPT-handling der kun søger i XML-dokumenter fra en foruddefineret whitelist fra Retsinformation.dk
+servers:
+  - url: https://nyretsinfoxml.onrender.com
+    description: Render-hostet service
+paths:
+  /search_whitelist:
+    post:
+      summary: Søg i whitelistede XML-regelsæt
+      operationId: searchWhitelist
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Spørgsmål eller søgeord (fx "diabetes kørekort § 2")
+              required:
+                - query
+      responses:
+        '200':
+          description: Liste over relevante regler fra XML-filer
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  results:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        titel:
+                          type: string
+                        populærTitel:
+                          type: string
+                        paragraf:
+                          type: string
+                        uddrag:
+                          type: string
+                        link:
+                          type: string
