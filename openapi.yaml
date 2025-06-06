@@ -4,7 +4,7 @@ info:
   version: 1.0.0
   description: GPT-handlinger til at søge og læse bekendtgørelser og love fra retsinformation.dk
 servers:
-  - url: https://retsinfo-scraper.onrender.com
+  - url: https://nyretsinfoxml.onrender.com
     description: Live API på Render
 paths:
   /search_laws:
