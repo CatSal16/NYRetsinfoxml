@@ -20,7 +20,8 @@ paths:
                 url:
                   type: string
                   description: Retsinformation-URL til bekendtgørelse (uden /xml eller med)
-              required: [url]
+              required:
+                - url
       responses:
         '200':
           description: Udtrukket tekst
