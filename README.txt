@@ -1,0 +1,1 @@
+Denne ZIP indeholder en whitelist med XML-links som GPT'en skal læse og søge i.
