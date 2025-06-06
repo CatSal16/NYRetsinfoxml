@@ -1,10 +1,11 @@
-openapi: "3.0.1"
+openapi: "3.1.0"
 info:
   title: Retsinfo-scraper
   version: "1.0.0"
   description: |
-    Hent og udtræk tekst fra gældende bekendtgørelser på retsinformation.dk via XML-sider.
-    API’et begrænser opslag til whitelisted bekendtgørelser.
+    Udtræk tekst fra gældende bekendtgørelser på retsinformation.dk.
+    Modtag en URL til en bekendtgørelse og returnér dens indhold som tekst.
+    Kun whitelisted bekendtgørelser kan behandles.
 
 servers:
   - url: https://nyretsinfoxml.onrender.com
@@ -16,8 +17,7 @@ paths:
       operationId: extractText
       summary: Udtræk tekst fra retsinformation.dk
       description: |
-        Modtager en URL til en bekendtgørelse på retsinformation.dk og returnerer den udtrukne tekst.
-        Kun whitelisted bekendtgørelser er tilladt.
+        Henter og udtrækker tekst fra en XML-side for en bekendtgørelse på retsinformation.dk.
       requestBody:
         required: true
         content:
@@ -28,13 +28,15 @@ paths:
                 url:
                   type: string
                   format: uri
-                  description: Retsinformation-URL (f.eks. med eller uden /xml)
-                  example: https://www.retsinformation.dk/eli/lta/2024/123
+                  description: URL til bekendtgørelsen (med eller uden /xml)
+                  examples:
+                    eksempel:
+                      value: https://www.retsinformation.dk/eli/lta/2024/123
               required:
                 - url
       responses:
         '200':
-          description: Tekst udtrukket succesfuldt
+          description: Udtrukket tekst
           content:
             application/json:
               schema:
@@ -42,9 +44,14 @@ paths:
                 properties:
                   tekst:
                     type: string
-                    description: Den udtrukne tekst fra bekendtgørelsen
-                    example: "Denne bekendtgørelse fastsætter regler om..."
+                    description: Udtrukket tekst fra bekendtgørelsen
+                    examples:
+                      eksempel:
+                        value: >
+                          "Denne bekendtgørelse fastsætter regler om..."
         '400':
-          description: Ugyldig anmodning (fx ugyldig URL eller ikke whitelisted)
+          description: Ugyldig anmodning – fx ugyldig eller ikke-whitelisted URL
         '500':
-          description: Intern serverfejl under behandlingen
+          description: Intern serverfejl
+
+components: {}
