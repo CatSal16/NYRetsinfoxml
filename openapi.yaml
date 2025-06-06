@@ -2,41 +2,39 @@ openapi: "3.1.0"
 info:
   title: Retsinfo-scraper
   version: "1.0.0"
-  description: |
+  description: >
     Udtræk tekst fra gældende bekendtgørelser på retsinformation.dk.
-    Modtag en URL til en bekendtgørelse og returnér dens indhold som tekst.
-    Kun whitelisted bekendtgørelser kan behandles.
+    Modtager en URL til en bekendtgørelse og returnerer dens tekstindhold.
+    Kun whitelisted bekendtgørelser understøttes.
 
 servers:
   - url: https://nyretsinfoxml.onrender.com
-    description: Produktion
 
 paths:
   /extract_text:
     post:
       operationId: extractText
-      summary: Udtræk tekst fra retsinformation.dk
+      summary: Udtræk tekst fra retsinformation.dk bekendtgørelse
       description: |
-        Henter og udtrækker tekst fra en XML-side for en bekendtgørelse på retsinformation.dk.
+        Returnerer bekendtgørelsestekst fra en XML-side på retsinformation.dk.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
+              required:
+                - url
               properties:
                 url:
                   type: string
                   format: uri
-                  description: URL til bekendtgørelsen (med eller uden /xml)
+                  description: URL til bekendtgørelsen (f.eks. med eller uden /xml)
                   examples:
-                    eksempel:
-                      value: https://www.retsinformation.dk/eli/lta/2024/123
-              required:
-                - url
+                    - https://www.retsinformation.dk/eli/lta/2024/123
       responses:
         '200':
-          description: Udtrukket tekst
+          description: Udtrukket tekst fra bekendtgørelsen
           content:
             application/json:
               schema:
@@ -44,14 +42,12 @@ paths:
                 properties:
                   tekst:
                     type: string
-                    description: Udtrukket tekst fra bekendtgørelsen
+                    description: Udtrukket brødtekst
                     examples:
-                      eksempel:
-                        value: >
-                          "Denne bekendtgørelse fastsætter regler om..."
+                      - "Denne bekendtgørelse fastsætter regler om..."
         '400':
-          description: Ugyldig anmodning – fx ugyldig eller ikke-whitelisted URL
+          description: Ugyldig anmodning (fx forkert eller uwhitelisted URL)
         '500':
-          description: Intern serverfejl
+          description: Intern serverfejl under behandlingen
 
 components: {}
