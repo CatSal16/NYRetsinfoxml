@@ -21,7 +21,7 @@ paths:
               properties:
                 url:
                   type: string
-                  description: Retsinformation-URL til bekendtgørelse (uden /xml eller med)
+                  description: Retsinformation-URL til bekendtgørelse (med eller uden /xml)
       responses:
         '200':
           description: Udtrukket tekst
@@ -32,3 +32,4 @@ paths:
                 properties:
                   tekst:
                     type: string
+
