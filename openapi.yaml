@@ -1,30 +1,40 @@
-openapi: 3.0.1
+openapi: "3.0.1"
 info:
   title: Retsinfo-scraper
-  version: 1.0.0
-  description: GPT-handling til udtræk af gældende regler fra retsinformation.dk som XML. Bemærk: Anvender intern whitelist for at begrænse opslag til godkendte bekendtgørelser.
+  version: "1.0.0"
+  description: |
+    Hent og udtræk tekst fra gældende bekendtgørelser på retsinformation.dk via XML-sider.
+    API’et begrænser opslag til whitelisted bekendtgørelser.
+
 servers:
   - url: https://nyretsinfoxml.onrender.com
+    description: Produktion
+
 paths:
   /extract_text:
     post:
-      summary: Hent og udtræk tekst fra XML-lovgivningsside
       operationId: extractText
+      summary: Udtræk tekst fra retsinformation.dk
+      description: |
+        Modtager en URL til en bekendtgørelse på retsinformation.dk og returnerer den udtrukne tekst.
+        Kun whitelisted bekendtgørelser er tilladt.
       requestBody:
         required: true
         content:
           application/json:
             schema:
               type: object
-              required:
-                - url
               properties:
                 url:
                   type: string
-                  description: Retsinformation-URL til bekendtgørelse (med eller uden /xml)
+                  format: uri
+                  description: Retsinformation-URL (f.eks. med eller uden /xml)
+                  example: https://www.retsinformation.dk/eli/lta/2024/123
+              required:
+                - url
       responses:
         '200':
-          description: Udtrukket tekst
+          description: Tekst udtrukket succesfuldt
           content:
             application/json:
               schema:
@@ -32,4 +42,9 @@ paths:
                 properties:
                   tekst:
                     type: string
-
+                    description: Den udtrukne tekst fra bekendtgørelsen
+                    example: "Denne bekendtgørelse fastsætter regler om..."
+        '400':
+          description: Ugyldig anmodning (fx ugyldig URL eller ikke whitelisted)
+        '500':
+          description: Intern serverfejl under behandlingen
